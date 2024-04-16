@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordle Game</title>
+  <!-- Include React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <!-- Include Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    #root {
+      max-width: 800px;
+      margin: 20px auto; 
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center; /* Center content */
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    h2 {
+      color: #666;
+    }
+
+    .guess {
+      margin-bottom: 10px;
+      text-align: left; 
+    }
+
+    .guess div {
+      margin-bottom: 5px;
+    }
+
+    .game-board {
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+    }
+
+    .row {
+      display: flex;
+      margin-bottom: 5px;
+    }
+
+    .letter-space {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 5px;
+    }
+
+    .letter {
+      font-size: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Wordle board component
+    const WordleBoard = () => {
+      // Hardcoded guesses and answer
+      const guesses = ["might", "flood", "stray"];
+      const answer = "moody";
+
+      // Calculate and display results
+      const results = guesses.map((guess, index) => {
+        let correctLetters = 0;
+        let correctPositions = 0;
+
+        // Check for correct letters and positions
+        for (let i = 0; i < answer.length; i++) {
+          if (guess.includes(answer[i])) {
+            correctLetters++;
+          }
+          if (guess[i] === answer[i]) {
+            correctPositions++;
+          }
+        }
+
+        // Display results
+        return (
+          <div key={index} className="guess">
+            <div>Guess: {guess}</div>
+            <div>Correct Letters: {correctLetters}</div>
+            <div>Correct Positions: {correctPositions}</div>
+            <hr />
+          </div>
+        );
+      });
+
+      // Render WordleBoard
+      return (
+        <div>
+          <h1>Wordle</h1>
+          <h2>Guesses:</h2>
+          <div className="game-board">
+            {guesses.map((guess, index) => (
+              <div key={index} className="row">
+                {guess.split('').map((letter, idx) => (
+                  <div key={idx} className="letter-space">{letter}</div>
+                ))}
+              </div>
+            ))}
+          </div>
+          {results}
+        </div>
+      );
+    };
+
+    // On-screen keyboard component
+    const OnScreenKeyboard = () => {
+      // Render OnScreenKeyboard
+      return (
+        <div>
+          <h2>On-Screen Keyboard:</h2>
+          {/* Render each letter as a button */}
+          {Array.from("abcdefghijklmnopqrstuvwxyz").map((letter, index) => (
+            <button key={index}>{letter}</button>
+          ))}
+        </div>
+      );
+    };
+
+    // App component
+    const App = () => {
+      return (
+        <div>
+          <WordleBoard />
+          <OnScreenKeyboard />
+        </div>
+      );
+    };
+
+    // Render the App component inside the root div
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
